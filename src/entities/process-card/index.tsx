@@ -14,6 +14,7 @@ import { QueueInfoDto } from "shared/api/queues";
 
 type PropsType = {
   data: QueueInfoDto;
+  onDetails?: () => void;
 };
 
 const TableHeader = styled("td")({
@@ -28,7 +29,7 @@ const TableValue = styled("td")({
   paddingRight: 10,
 });
 
-export const ProcessCard: FC<PropsType> = ({ data }) => {
+export const ProcessCard: FC<PropsType> = ({ data, onDetails }) => {
   return (
     <Card sx={{ width: 300 }}>
       <CardHeader
@@ -53,7 +54,9 @@ export const ProcessCard: FC<PropsType> = ({ data }) => {
       <CardActions
         sx={{ justifyContent: "flex-end", borderTop: "1px solid #EEEEEE" }}
       >
-        <Button color="secondary">View details</Button>
+        <Button color="secondary" onClick={onDetails}>
+          View details
+        </Button>
       </CardActions>
     </Card>
   );

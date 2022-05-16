@@ -4,6 +4,7 @@ import { concat, map, of, tap } from "rxjs";
 import { UploadedFileDto, uploadFile } from "shared/api/files";
 
 export const addFiles = createEvent<FileList>();
+export const deleteFile = createEvent<File>();
 
 const transformFiles = addFiles.map<File[]>((files) => Array.from(files));
 const extractFirstFile = createEvent();
@@ -15,7 +16,8 @@ export const $files = createStore<File[]>([])
     return [...prev, ...payload];
   })
   .on(extractFirstFile, (prev) => prev.slice(1))
-  .on(upload, (prev) => uploading(prev));
+  .on(upload, (prev) => uploading(prev))
+  .on(deleteFile, (prev, payload) => prev.filter((file) => file !== payload));
 
 const clearFileInUploading = createEvent();
 const addFile = createEvent<File>();

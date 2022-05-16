@@ -1,49 +1,31 @@
-import {
-  Box,
-  Button,
-  Card,
-  CardActions,
-  CardContent,
-  Typography,
-} from "@mui/material";
+import { Button } from "@mui/material";
 import React from "react";
 import InsertDriveFileIcon from "@mui/icons-material/InsertDriveFile";
 import { theme } from "shared";
+import CardLayout from "./card-layout";
 // import { FileForUploading } from "entities/file-for-uploading";
 
 type PropsType = {
   data: File;
+  onDelete: () => void;
 };
 
-const FileCardForUploading = ({ data }: PropsType) => {
+const FileCardForUploading = ({ data, onDelete }: PropsType) => {
   return (
-    <Card
-      sx={{ width: 200, marginRight: "1rem", marginBottom: "1rem" }}
-      elevation={2}
-    >
-      <Box
-        sx={{
-          height: 150,
-          borderBottom: "1px solid #EEEEEE",
-          justifyContent: "center",
-          alignItems: "center",
-          display: "flex",
-        }}
-      >
+    <CardLayout
+      actions={
+        <Button size="small" color="error" onClick={onDelete}>
+          Delete
+        </Button>
+      }
+      icon={
         <InsertDriveFileIcon
           fontSize="large"
           sx={{ color: theme.palette.primary.light }}
         />
-      </Box>
-      <CardContent>
-        <Typography variant="h5">{data.name}</Typography>
-      </CardContent>
-      <CardActions>
-        <Button size="small" color="error">
-          Delete
-        </Button>
-      </CardActions>
-    </Card>
+      }
+      name={data.name}
+    />
   );
 };
 

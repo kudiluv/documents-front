@@ -1,4 +1,6 @@
 export type UploadedFileDto = {
   name: string;
-  location: string;
+  originalName: string;
+  link: string;
+  mimetype: string;
 };

@@ -7,6 +7,7 @@ import {
   $files,
   $uploadedFiles,
   addFiles,
+  deleteFile,
   upload,
 } from "../model";
 import FileCardForUploading from "./file-card/card";
@@ -27,7 +28,6 @@ const UploadFiles = () => {
   const files = useStore($files);
   const fileInUploading = useStore($fileInUploading);
   const uploadedFiles = useStore($uploadedFiles);
-  console.log(fileInUploading);
   return (
     <>
       <label htmlFor="contained-button-file">
@@ -45,7 +45,13 @@ const UploadFiles = () => {
       <Content>
         {fileInUploading && <FileCardUploading data={fileInUploading} />}
         {files.map((file, index) => (
-          <FileCardForUploading data={file} key={index} />
+          <FileCardForUploading
+            data={file}
+            onDelete={() => {
+              deleteFile(file);
+            }}
+            key={file.name}
+          />
         ))}
         {uploadedFiles.map((file, index) => (
           <FileCardSuccess data={file} key={index} />
