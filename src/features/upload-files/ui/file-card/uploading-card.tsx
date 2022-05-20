@@ -1,6 +1,6 @@
 import { CircularProgress } from "@mui/material";
 import React from "react";
-import CardLayout from "./card-layout";
+import { CardLayout } from "entities/file-card";
 
 type PropsType = {
   data: File;

@@ -5,17 +5,31 @@ export type TypeOfSearchFiles =
   | "video"
   | "document"
   | "tables"
-  | "image";
+  | "image"
+  | "presentation"
+  | "any";
 
 export type SearchParamsType = {
-  queryString: string;
+  fileNameQuery: string;
+  textQuery: string;
   type: TypeOfSearchFiles[];
-  startDate: string;
-  endDate: string;
+  startDate: string | null;
+  endDate: string | null;
 };
 
-export const getFilesByQuery = (params: SearchParamsType) => {
-  axiosInstance.get("search", {
-    params: params,
-  });
+export type FileSearchResponse = {
+  id: string;
+  link: string;
+  originalName: string;
+  type: TypeOfSearchFiles;
+};
+
+export type SearchResponse = {
+  pages: number;
+  items: FileSearchResponse[];
+};
+
+export const getFilesByQuery = async (params: SearchParamsType) => {
+  const result = await axiosInstance.post<SearchResponse>("search", params);
+  return result.data;
 };

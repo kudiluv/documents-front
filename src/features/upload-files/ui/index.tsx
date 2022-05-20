@@ -6,7 +6,9 @@ import {
   $fileInUploading,
   $files,
   $uploadedFiles,
+  $uploadingStatus,
   addFiles,
+  clear,
   deleteFile,
   upload,
 } from "../model";
@@ -28,6 +30,7 @@ const UploadFiles = () => {
   const files = useStore($files);
   const fileInUploading = useStore($fileInUploading);
   const uploadedFiles = useStore($uploadedFiles);
+  const uploadingStatus = useStore($uploadingStatus);
   return (
     <>
       <label htmlFor="contained-button-file">
@@ -37,11 +40,28 @@ const UploadFiles = () => {
           multiple
           onChange={(e) => addFiles(e.target.files!)}
         />
-        <Button variant="contained" component="span" startIcon={<AddIcon />}>
+        <Button
+          variant="contained"
+          component="span"
+          startIcon={<AddIcon />}
+          disabled={uploadingStatus === "uploading"}
+        >
           Add files
         </Button>
       </label>
-      <Button onClick={() => upload()}>Upload</Button>
+      <Button
+        sx={{ ml: 1 }}
+        onClick={() => upload()}
+        variant="outlined"
+        disabled={uploadingStatus === "uploading" || !files.length}
+      >
+        Upload
+      </Button>
+      {uploadingStatus === "finished" && (
+        <Button sx={{ ml: 1 }} onClick={() => clear()} variant="outlined">
+          Clear
+        </Button>
+      )}
       <Content>
         {fileInUploading && <FileCardUploading data={fileInUploading} />}
         {files.map((file, index) => (

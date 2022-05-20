@@ -1,0 +1,18 @@
+version: "3.3"
+services:
+  # front:
+  #   image: node:lts-alpine3.14
+  #   volumes:
+  #     - .:/app
+  #   working_dir: /app
+  #   command: sh -c 
+  #     "npm install &&
+  #      npm run build
+  #      "
+  nginx:
+    image: nginx:stable-alpine
+    ports:
+      - "80:80"
+    volumes:
+      - ./nginx:/etc/nginx/conf.d/
+      - .:/sites/documents

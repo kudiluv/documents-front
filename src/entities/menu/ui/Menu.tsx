@@ -14,7 +14,7 @@ const Container = styled(Box)({
 
 export const Menu = () => {
   return (
-    <Container>
+    <Container sx={{ width: { xs: 250, md: "auto" } }}>
       <img src="./logo.svg" />
       <Stack spacing={2} sx={{ paddingTop: 2 }}>
         <MenuItem startIcon={<SearchIcon />} to={"/"}>

@@ -1,23 +1,29 @@
-import React, { lazy } from "react";
+import React from "react";
 import { Route, Routes } from "react-router-dom";
+import { useStore } from "effector-react";
 import { MainRouter } from "features/main-router";
-
-//const TestPage = lazy(() => import('./task-list'))
-const SearchPage = lazy(() => import("./search"));
-const UploadPage = lazy(() => import("./upload"));
-const StatsPage = lazy(() => import("./processing"));
-const ProcessingDetailsPage = lazy(() => import("./processing-details"));
+import { Login } from "features/login";
+import { $user } from "shared/model/user";
+import SearchPage from "./search";
+import Processing from "./processing";
+import ProcessingDetailsPage from "./processing-details";
+import UploadPage from "./upload";
 
 export const Routing = () => {
+  const { authorize } = useStore($user);
   return (
     <Routes>
-      <Route path="/" element={<MainRouter />}>
-        <Route path="/" element={<SearchPage />} />
-        <Route path="/search" element={<SearchPage />} />
-        <Route path="/processing" element={<StatsPage />} />
-        <Route path="/processing/:name" element={<ProcessingDetailsPage />} />
-        <Route path="/upload" element={<UploadPage />} />
-      </Route>
+      {authorize ? (
+        <Route path="/" element={<MainRouter />}>
+          <Route path="/" element={<SearchPage />} />
+          <Route path="/search" element={<SearchPage />} />
+          <Route path="/processing" element={<Processing />} />
+          <Route path="/processing/:name" element={<ProcessingDetailsPage />} />
+          <Route path="/upload" element={<UploadPage />} />
+        </Route>
+      ) : (
+        <Route path="/" element={<Login />} />
+      )}
     </Routes>
   );
 };

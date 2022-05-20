@@ -2,8 +2,7 @@ import { Button } from "@mui/material";
 import React from "react";
 import InsertDriveFileIcon from "@mui/icons-material/InsertDriveFile";
 import { theme } from "shared";
-import CardLayout from "./card-layout";
-// import { FileForUploading } from "entities/file-for-uploading";
+import { CardLayout } from "entities/file-card";
 
 type PropsType = {
   data: File;

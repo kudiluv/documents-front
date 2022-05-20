@@ -3,7 +3,7 @@ import { List } from "features/queues";
 import { Page } from "shared/ui/page";
 import { PageHeader } from "shared/ui/page-header";
 
-const SearchPage = () => {
+const Processing = () => {
   return (
     <Page>
       <PageHeader
@@ -15,4 +15,4 @@ const SearchPage = () => {
   );
 };
 
-export default SearchPage;
+export default Processing;

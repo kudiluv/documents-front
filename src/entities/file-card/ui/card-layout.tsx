@@ -25,7 +25,9 @@ const CardLayout = ({ icon, name, actions }: PropsType) => {
         {icon}
       </Box>
       <CardContent>
-        <Typography variant="h6">{name}</Typography>
+        <Typography variant="body1" whiteSpace="nowrap" textOverflow="ellipsis">
+          {name}
+        </Typography>
       </CardContent>
       <CardActions>{actions}</CardActions>
     </Card>

@@ -1,6 +1,7 @@
 import { createEvent, createStore, forward } from "effector";
+import { reset } from "patronum";
 import { toast } from "react-toastify";
-import { concat, map, of, tap } from "rxjs";
+import { concat, of, tap } from "rxjs";
 import { UploadedFileDto, uploadFile } from "shared/api/files";
 
 export const addFiles = createEvent<FileList>();
@@ -41,16 +42,36 @@ forward({
   to: clearFileInUploading,
 });
 
+export const clear = createEvent();
+
+type UploadingStatus = "idle" | "uploading" | "finished";
+
+const changeUploadingStatus = createEvent<UploadingStatus>();
+export const $uploadingStatus = createStore<UploadingStatus>("idle").on(
+  changeUploadingStatus,
+  (_, payload) => payload
+);
+
+reset({
+  clock: clear,
+  target: [$files, $uploadedFiles, $fileInUploading, $uploadingStatus],
+});
+
 function uploading(files: File[]) {
+  changeUploadingStatus("uploading");
   const obesrvables = files.map((file) => {
     const initUploading = of("init").pipe(tap(() => addFile(file)));
     const request = uploadFile(file).pipe(
-      map(({ response }) => response),
       tap(() => toast.success(`Uploaded ${file.name} file`)),
       tap((res) => uploaded(res))
     );
     return concat(initUploading, request);
   });
 
-  concat(...obesrvables).subscribe();
+  concat(...obesrvables).subscribe({
+    complete: () => {
+      toast.success("All files have been uploaded");
+      changeUploadingStatus("finished");
+    },
+  });
 }

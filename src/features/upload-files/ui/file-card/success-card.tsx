@@ -3,8 +3,8 @@ import React from "react";
 import DoneIcon from "@mui/icons-material/Done";
 import { toast } from "react-toastify";
 import { theme } from "shared";
+import { CardLayout } from "entities/file-card";
 import { UploadedFileDto } from "shared/api/files";
-import CardLayout from "./card-layout";
 
 type PropsType = {
   data: UploadedFileDto;
@@ -27,7 +27,7 @@ const FileCardSuccess = ({ data }: PropsType) => {
       name={data.originalName}
       actions={
         <Button size="small" color="info" onClick={onCopy}>
-          Copy
+          Link
         </Button>
       }
     />

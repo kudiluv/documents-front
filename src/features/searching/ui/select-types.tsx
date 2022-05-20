@@ -11,18 +11,25 @@ import { $types, changeTypes } from "../model";
 
 const SelectTypes = () => {
   const types = useStore($types);
+
   return (
     <FormControl sx={{ width: "50%", mr: 1 }}>
-      <InputLabel id="multiple-type-label">Type</InputLabel>
+      <InputLabel id="multiple-type-label"></InputLabel>
       <Select
         label="Type"
         multiple
         labelId="multiple-type-label"
         value={types}
+        placeholder="All"
         onChange={({ target }) =>
           changeTypes(target.value as TypeOfSearchFiles[])
         }
-        renderValue={(selected) => selected.join(", ")}
+        variant="standard"
+        displayEmpty
+        renderValue={(selected) => {
+          if (!selected.length) return "All";
+          return selected.join(", ");
+        }}
       >
         <MenuItem value="document">
           <InsertDriveFileIcon sx={{ color: blue[500], mr: 1 }} />
