@@ -39,16 +39,18 @@ export const ProcessCard: FC<PropsType> = ({ data, onDetails }) => {
       />
       <CardContent>
         <table>
-          <tr>
-            <TableHeader>Tasks</TableHeader>
-            <TableHeader>In Process</TableHeader>
-            <TableHeader>Workers</TableHeader>
-          </tr>
-          <tr>
-            <TableValue>{data.tasksCount}</TableValue>
-            <TableValue>{data.tasksInProcessCount}</TableValue>
-            <TableValue>{data.workers}</TableValue>
-          </tr>
+          <tbody>
+            <tr>
+              <TableHeader>Tasks</TableHeader>
+              <TableHeader>In Process</TableHeader>
+              <TableHeader>Workers</TableHeader>
+            </tr>
+            <tr>
+              <TableValue>{data.tasksCount}</TableValue>
+              <TableValue>{data.tasksInProcessCount}</TableValue>
+              <TableValue>{data.workers}</TableValue>
+            </tr>
+          </tbody>
         </table>
       </CardContent>
       <CardActions

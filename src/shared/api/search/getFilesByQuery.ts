@@ -7,6 +7,7 @@ export type TypeOfSearchFiles =
   | "tables"
   | "image"
   | "presentation"
+  | "pdf"
   | "any";
 
 export type SearchParamsType = {
@@ -15,6 +16,7 @@ export type SearchParamsType = {
   type: TypeOfSearchFiles[];
   startDate: string | null;
   endDate: string | null;
+  page: number;
 };
 
 export type FileSearchResponse = {
@@ -26,6 +28,7 @@ export type FileSearchResponse = {
 
 export type SearchResponse = {
   pages: number;
+  countItems: number;
   items: FileSearchResponse[];
 };
 

@@ -1,13 +1,16 @@
-import { Button } from "@mui/material";
+import { IconButton } from "@mui/material";
 import React from "react";
 import { toast } from "react-toastify";
+import DownloadIcon from "@mui/icons-material/Download";
+import LinkIcon from "@mui/icons-material/Link";
+import DeleteIcon from "@mui/icons-material/Delete";
 import { FileSearchResponse } from "shared/api/search";
 import CardLayout from "./card-layout";
 import { iconsFile } from "./icons-file";
 
 type PropsType = {
   data: FileSearchResponse;
-  onDelete?: (id: string) => void;
+  onDelete?: () => void;
 };
 
 const CardWithButtons = ({ data, onDelete }: PropsType) => {
@@ -20,24 +23,30 @@ const CardWithButtons = ({ data, onDelete }: PropsType) => {
     <CardLayout
       icon={iconsFile[data.type]}
       name={data.originalName}
+      actionsProps={{
+        sx: {
+          justifyContent: "space-between",
+        },
+      }}
       actions={
         <>
-          <a href={data.link} download={data.originalName}>
-            <Button
-              size="small"
-              color="secondary"
-              sx={{ mr: 5 }}
-              onClick={() => {
-                onDelete?.(data.id);
-              }}
+          <IconButton onClick={onDelete}>
+            <DeleteIcon />
+          </IconButton>
+          <div>
+            <a
+              href={data.link}
+              download={data.originalName}
+              style={{ alignSelf: "end" }}
             >
-              Download
-            </Button>
-          </a>
-
-          <Button size="small" color="info" onClick={onCopy}>
-            Link
-          </Button>
+              <IconButton>
+                <DownloadIcon />
+              </IconButton>
+            </a>
+            <IconButton onClick={onCopy}>
+              <LinkIcon />
+            </IconButton>
+          </div>
         </>
       }
     />

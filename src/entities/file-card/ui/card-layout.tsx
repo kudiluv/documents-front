@@ -1,13 +1,21 @@
-import { Box, Card, CardActions, CardContent, Typography } from "@mui/material";
+import {
+  Box,
+  Card,
+  CardActions,
+  CardActionsProps,
+  CardContent,
+  Typography,
+} from "@mui/material";
 import React from "react";
 
 type PropsType = {
   icon: React.ReactNode;
   name: string;
   actions?: React.ReactNode;
+  actionsProps?: CardActionsProps;
 };
 
-const CardLayout = ({ icon, name, actions }: PropsType) => {
+const CardLayout = ({ icon, name, actions, actionsProps }: PropsType) => {
   return (
     <Card
       sx={{ width: 200, marginRight: "1rem", marginBottom: "1rem" }}
@@ -29,7 +37,7 @@ const CardLayout = ({ icon, name, actions }: PropsType) => {
           {name}
         </Typography>
       </CardContent>
-      <CardActions>{actions}</CardActions>
+      <CardActions {...actionsProps}>{actions}</CardActions>
     </Card>
   );
 };

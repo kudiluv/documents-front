@@ -5,7 +5,7 @@ import {
   InputAdornment,
   TextField,
 } from "@mui/material";
-import { useStore, useStoreMap } from "effector-react";
+import { useStore } from "effector-react";
 import React, { useRef } from "react";
 import SearchIcon from "@mui/icons-material/Search";
 import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFns";
@@ -15,12 +15,8 @@ import { Popover } from "@material-ui/core";
 import TuneIcon from "@mui/icons-material/Tune";
 
 import {
-  $endDate,
-  $fileName,
-  $searchQuery,
-  $searchString,
-  $searchStringFilter,
-  $startDate,
+  $queryParams,
+  $filter,
   applyFilter,
   changeEndDate,
   changeFileName,
@@ -28,20 +24,16 @@ import {
   changeSearchStringFilter,
   changeStartDate,
   resetFilters,
+  $searchString,
 } from "../model";
 import SelectTypes from "./select-types";
 import { TextWrapper } from "./text-wrapper";
 
 export const SearchBar = () => {
-  const startDate = useStore($startDate);
-  const endDate = useStore($endDate);
-  const query = useStore($searchString);
-  const queryFilter = useStore($searchStringFilter);
-  const fileNameApplied = useStoreMap(
-    $searchQuery,
-    (source) => source.fileNameQuery
-  );
-  const fileName = useStore($fileName);
+  const queryParams = useStore($queryParams);
+  const filter = useStore($filter);
+  const searchString = useStore($searchString);
+
   const [anchorEl, setAnchorEl] = React.useState<HTMLButtonElement | null>(
     null
   );
@@ -63,14 +55,14 @@ export const SearchBar = () => {
         onChange={(e) => {
           changeSearchString(e.target.value);
         }}
-        value={query}
+        value={searchString}
         InputProps={{
           startAdornment: (
             <InputAdornment position="start">
               <SearchIcon color="action" sx={{ mr: 1 }} />
-              {fileNameApplied && (
+              {queryParams.fileNameQuery && (
                 <Chip
-                  label={`file name: ${fileNameApplied}`}
+                  label={`file name: ${queryParams.fileNameQuery}`}
                   onClick={() => {
                     handleClick();
                   }}
@@ -99,6 +91,7 @@ export const SearchBar = () => {
           vertical: "top",
           horizontal: "left",
         }}
+        disableEnforceFocus
         anchorEl={anchorEl}
         onClose={handleClose}
       >
@@ -116,7 +109,7 @@ export const SearchBar = () => {
           <SelectTypes />
           <TextWrapper>Сontains words</TextWrapper>
           <TextField
-            value={queryFilter}
+            value={filter.textQuery}
             size="small"
             onChange={(e) => {
               changeSearchStringFilter(e.target.value);
@@ -124,7 +117,7 @@ export const SearchBar = () => {
           />
           <TextWrapper>File name</TextWrapper>
           <TextField
-            value={fileName}
+            value={filter.fileNameQuery}
             size="small"
             onChange={(e) => {
               changeFileName(e.target.value);
@@ -135,9 +128,9 @@ export const SearchBar = () => {
             <div>
               <DatePicker
                 label="Start date"
-                value={startDate}
+                value={filter.startDate}
                 onChange={(e) => changeStartDate(e || "")}
-                maxDate={endDate}
+                maxDate={filter.endDate}
                 renderInput={(params) => (
                   <TextField
                     {...params}
@@ -149,9 +142,9 @@ export const SearchBar = () => {
               />
               <DatePicker
                 label="End date"
-                value={endDate}
+                value={filter.endDate}
                 onChange={(e) => changeEndDate(e || "")}
-                minDate={startDate}
+                minDate={filter.startDate}
                 renderInput={(params) => (
                   <TextField
                     {...params}

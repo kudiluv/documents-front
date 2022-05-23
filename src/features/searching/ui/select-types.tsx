@@ -1,16 +1,17 @@
 import React from "react";
 import { FormControl, InputLabel, MenuItem, Select } from "@mui/material";
-import { useStore } from "effector-react";
+import { useStoreMap } from "effector-react";
 import InsertDriveFileIcon from "@mui/icons-material/InsertDriveFile";
 import MovieIcon from "@mui/icons-material/Movie";
 import AudioFileIcon from "@mui/icons-material/AudioFile";
 import ImageIcon from "@mui/icons-material/Image";
-import { blue, green, red } from "@mui/material/colors";
+import { blue, green, red, yellow } from "@mui/material/colors";
+import PictureAsPdfIcon from "@mui/icons-material/PictureAsPdf";
 import { TypeOfSearchFiles } from "shared/api/search";
-import { $types, changeTypes } from "../model";
+import { $filter, changeTypes } from "../model";
 
 const SelectTypes = () => {
-  const types = useStore($types);
+  const types = useStoreMap($filter, (filter) => filter.type);
 
   return (
     <FormControl sx={{ width: "50%", mr: 1 }}>
@@ -44,8 +45,15 @@ const SelectTypes = () => {
         <MenuItem value="audio">
           <AudioFileIcon sx={{ color: red[500], mr: 1 }} /> Audios
         </MenuItem>
+        <MenuItem value="presentation">
+          <InsertDriveFileIcon sx={{ color: yellow[500], mr: 1 }} />{" "}
+          Presentation
+        </MenuItem>
         <MenuItem value="tables">
           <InsertDriveFileIcon sx={{ color: green[500], mr: 1 }} /> Tables
+        </MenuItem>
+        <MenuItem value="pdf">
+          <PictureAsPdfIcon sx={{ color: red[500], mr: 1 }} /> Pdf
         </MenuItem>
       </Select>
     </FormControl>

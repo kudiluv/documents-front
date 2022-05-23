@@ -1,11 +1,6 @@
-import {
-  combine,
-  createEffect,
-  createEvent,
-  createStore,
-  sample,
-} from "effector";
+import { createEffect, createEvent, createStore, sample } from "effector";
 import { debounce, reset } from "patronum";
+import { deleteFx } from "entities/removing-file";
 import {
   getFilesByQuery,
   SearchParamsType,
@@ -20,94 +15,95 @@ export const $searchString = createStore("").on(
   (_, payload) => payload
 );
 
-export const changeSearchStringFilter = createEvent<string>();
-export const $searchStringFilter = createStore<string>("")
-  .on(changeSearchString, (_, payload) => payload)
-  .on(changeSearchStringFilter, (_, payload) => payload);
-
-export const changeTypes = createEvent<TypeOfSearchFiles[]>();
-export const $types = createStore<TypeOfSearchFiles[]>([]).on(
-  changeTypes,
-  (_, payload) => payload
-);
-
-export const changeStartDate = createEvent<string>();
-export const $startDate = createStore<string | null>(null).on(
-  changeStartDate,
-  (_, payload) => payload
-);
-
-export const changeEndDate = createEvent<string>();
-export const $endDate = createStore<string | null>(null).on(
-  changeEndDate,
-  (_, payload) => payload
-);
-
-export const changeFileName = createEvent<string>();
-export const $fileName = createStore<string>("").on(
-  changeFileName,
-  (_, payload) => payload
-);
-
-export const $searchQueryFilter = combine<SearchParamsType>({
-  fileNameQuery: $fileName,
-  type: $types,
-  startDate: $startDate,
-  endDate: $endDate,
-  textQuery: $searchStringFilter,
-});
-
 const debounceSearchQuery = debounce({
   source: $searchString,
-  timeout: 1000,
+  timeout: 600,
 });
 
-export const $searchQuery = createStore<SearchParamsType>({
+export const changePage = createEvent<number>();
+export const $queryParams = createStore<SearchParamsType>({
   fileNameQuery: "",
   type: [],
   startDate: null,
   endDate: null,
   textQuery: "",
-}).on(debounceSearchQuery, (prev, value) => ({ ...prev, textQuery: value }));
+  page: 1,
+})
+  .on(changePage, (prev, payload) => ({ ...prev, page: payload }))
+  .on(debounceSearchQuery, (prev, payload) => {
+    if (prev.textQuery === payload) {
+      return prev;
+    }
+    return {
+      ...prev,
+      textQuery: payload,
+      page: 1,
+    };
+  });
+
+export const changeTypes = createEvent<TypeOfSearchFiles[]>();
+export const changeStartDate = createEvent<string>();
+export const changeEndDate = createEvent<string>();
+export const changeFileName = createEvent<string>();
+export const changeSearchStringFilter = createEvent<string>();
+export const $filter = createStore<SearchParamsType>({
+  fileNameQuery: "",
+  type: [],
+  startDate: null,
+  endDate: null,
+  textQuery: "",
+  page: 1,
+})
+  .on(changeSearchString, (prev, textQuery) => ({ ...prev, textQuery }))
+  .on(changeSearchStringFilter, (prev, textQuery) => ({ ...prev, textQuery }))
+  .on(changeTypes, (prev, type) => ({
+    ...prev,
+    type,
+  }))
+  .on(changeStartDate, (prev, startDate) => ({
+    ...prev,
+    startDate,
+  }))
+  .on(changeEndDate, (prev, endDate) => ({
+    ...prev,
+    endDate,
+  }))
+  .on(changeFileName, (prev, fileNameQuery) => ({
+    ...prev,
+    fileNameQuery,
+  }));
+
+export const applyFilter = createEvent();
+
+sample({
+  clock: applyFilter,
+  source: $filter,
+  target: $queryParams,
+});
+
+sample({
+  clock: applyFilter,
+  source: $filter,
+  fn: (source) => source.textQuery,
+  target: $searchString,
+});
 
 export const searchFx = createEffect(getFilesByQuery);
 export const $files = createStore<SearchResponse>({
+  countItems: 0,
   pages: -1,
   items: [],
 }).on(searchFx.doneData, (_, payload) => ({ ...payload }));
 
-export const applyFilter = createEvent();
+sample({
+  clock: [$queryParams, deleteFx.done],
+  source: $queryParams,
+  target: searchFx,
+});
 
 export const resetFilters = createEvent();
 
 reset({
   clock: resetFilters,
-  target: [
-    $searchString,
-    $searchStringFilter,
-    $endDate,
-    $startDate,
-    $fileName,
-    $types,
-    $searchQuery,
-    $searchQueryFilter,
-  ],
-});
-
-sample({
-  clock: applyFilter,
-  source: $searchQueryFilter,
-  target: $searchQuery,
-});
-
-sample({
-  clock: applyFilter,
-  source: $searchQueryFilter,
-  fn: (source) => source.textQuery,
-  target: $searchString,
-});
-
-sample({
-  source: $searchQuery,
-  target: searchFx,
+  target: [$searchString, $filter, $queryParams],
 });

@@ -5,6 +5,7 @@ import { BrowserRouter } from "react-router-dom";
 import { ThemeProvider } from "@emotion/react";
 import { ToastContainer } from "react-toastify";
 import { Routing } from "pages";
+import { RemovingFile } from "entities/removing-file";
 import { theme } from "shared/theme";
 
 const App = () => {
@@ -23,6 +24,7 @@ const App = () => {
           draggable
           pauseOnHover
         />
+        <RemovingFile />
       </ThemeProvider>
     </>
   );

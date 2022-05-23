@@ -63,6 +63,7 @@
   },
   "devDependencies": {
     "@types/compose-function": "^0.0.30",
+    "@types/lodash": "^4.14.182",
     "@types/react-date-range": "^1.4.3",
     "eslint": "^8.2.0",
     "eslint-config-prettier": "^8.5.0",
