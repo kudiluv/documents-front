@@ -16,3 +16,9 @@ services:
     volumes:
       - ./nginx:/etc/nginx/conf.d/
       - .:/sites/documents
+    networks:
+      - main_network
+networks:
+  main_network:
+    driver: bridge
+    name: main_network
