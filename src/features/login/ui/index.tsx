@@ -39,7 +39,7 @@ export function Login() {
         <TextField
           fullWidth
           variant="standard"
-          label="username"
+          label="Username"
           sx={{ mt: "50px" }}
           value={username}
           onChange={(e) => changeUsername(e.target.value)}
@@ -47,7 +47,7 @@ export function Login() {
         <TextField
           fullWidth
           variant="standard"
-          label="Пароль"
+          label="Password"
           type={showPassword ? "text" : "password"}
           value={password}
           sx={{ mt: "26px", mb: "20px" }}
@@ -78,7 +78,7 @@ export function Login() {
             login();
           }}
         >
-          Войти
+          Login
         </LoadingButton>
       </Paper>
     </Container>
