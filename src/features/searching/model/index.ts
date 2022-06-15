@@ -107,3 +107,5 @@ reset({
   clock: resetFilters,
   target: [$searchString, $filter, $queryParams],
 });
+
+applyFilter();
